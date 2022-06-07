@@ -11,11 +11,11 @@ if __name__=='__main__':
 
     # Params
     params = {
-        'root_dir': 'C:\\LNCC\\ISPRS_BENCHMARK_DATASETS\\Vaihingen',
-        'window_size': (256, 256),
+        'root_dir': '/home/fabricio/datasets/GTA-V-SID/500x500',
+        'window_size': (250, 250),
         'cache': True,
         'bs': 8,
-        'n_classes': 6,
+        'n_classes': 2,
         'cpu': None,
         'precision' : 'full',
         'optimizer_params': {
@@ -35,8 +35,8 @@ if __name__=='__main__':
 
     params['weights'] = torch.ones(params['n_classes']) 
 
-    image_dir = os.path.join(params['root_dir'], 'top')
-    label_dir = os.path.join(params['root_dir'], 'gts_for_participants')
+    image_dir = os.path.join(params['root_dir'], 'slice')
+    label_dir = os.path.join(params['root_dir'], 'label')
 
     # Load image and label files from .txt
     train_images = pd.read_table('train_images.txt',header=None).values

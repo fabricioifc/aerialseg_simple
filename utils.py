@@ -37,7 +37,8 @@ def convert_from_color(arr_3d, palette=invert_palette):
     arr_2d = np.zeros((arr_3d.shape[0], arr_3d.shape[1]), dtype=np.uint8)
 
     for c, i in palette.items():
-        m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=2)
+        # m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=2)
+        m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=0)
         arr_2d[m] = i
 
     return arr_2d
