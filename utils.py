@@ -1,4 +1,3 @@
-
 import numpy as np
 import random
 import torch
@@ -9,13 +8,23 @@ from sklearn.metrics import confusion_matrix
 #### IMAGE UTILS ######
 
 # ISPRS color palette
-palette = {0 : (255, 255, 255), # Impervious surfaces (white)
-           1 : (0, 0, 255),     # Buildings (blue)
-           2 : (0, 255, 255),   # Low vegetation (cyan)
-           3 : (0, 255, 0),     # Trees (green)
-           4 : (255, 255, 0),   # Cars (yellow)
-           5 : (255, 0, 0),     # Clutter (red)
-           6 : (0, 0, 0)}       # Undefined (black)
+# palette = {0 : (255, 255, 255), # Impervious surfaces (white)
+#            1 : (0, 0, 255),     # Buildings (blue)
+#            2 : (0, 255, 255),   # Low vegetation (cyan)
+#            3 : (0, 255, 0),     # Trees (green)
+#            4 : (255, 255, 0),   # Cars (yellow)
+#            5 : (255, 0, 0),     # Clutter (red)
+#            6 : (0, 0, 0)}       # Undefined (black)
+palette = {
+    0 : (0, 0, 0),         # Sombra (black)
+    1 : (255, 0, 0),       # Desenvolvimento (vermelho)
+    2 : (197, 0, 255),     # Asfalto (roxo)
+    3 : (84, 117, 168),    # Água (azul)
+    4 : (133, 199, 126),   # Floresta Regeneração (verde claro)
+    5 : (52, 52, 52),      # Solo Exposto (cinza escuro)
+    6 : (38, 115, 0),      # Floresta Mata (verde escuro)
+}
+
 
 invert_palette = {v: k for k, v in palette.items()}
 
@@ -37,8 +46,7 @@ def convert_from_color(arr_3d, palette=invert_palette):
     arr_2d = np.zeros((arr_3d.shape[0], arr_3d.shape[1]), dtype=np.uint8)
 
     for c, i in palette.items():
-        # m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=2)
-        m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=0)
+        m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=2)
         arr_2d[m] = i
 
     return arr_2d
@@ -163,7 +171,7 @@ def grouper(n, iterable):
 
 
 def calculate_cm(predictions, labels, label_values = None, normalize = None):
-    return confusion_matrix(labels, predictions, label_values, normalize=normalize)
+    return confusion_matrix(labels, predictions, labels=label_values, normalize=normalize)
 
 
 """ Global acurracy metric calculation """

@@ -11,11 +11,12 @@ if __name__=='__main__':
 
     # Params
     params = {
-        'root_dir': '/home/fabricio/datasets/GTA-V-SID/500x500',
-        'window_size': (250, 250),
-        'cache': True,
+        # 'root_dir': 'D:\datasets\Vaihingen',
+        'root_dir': 'D:\\Export_Google_TIF\\20220803\\saida',
+        'window_size': (256, 256),
+        'cache': False,
         'bs': 8,
-        'n_classes': 2,
+        'n_classes': 7,
         'cpu': None,
         'precision' : 'full',
         'optimizer_params': {
@@ -30,12 +31,14 @@ if __name__=='__main__':
             'gamma': 0.1
         },
         'weights': '',
-        'maximum_epochs': 20,
+        'maximum_epochs': 3,
     }
 
     params['weights'] = torch.ones(params['n_classes']) 
 
-    image_dir = os.path.join(params['root_dir'], 'slice')
+    # image_dir = os.path.join(params['root_dir'], 'top')
+    # label_dir = os.path.join(params['root_dir'], 'gts_for_participants')
+    image_dir = os.path.join(params['root_dir'], 'images')
     label_dir = os.path.join(params['root_dir'], 'label')
 
     # Load image and label files from .txt
@@ -54,7 +57,7 @@ if __name__=='__main__':
     test_dataset = Dataset(test_images, test_labels, window_size = params['window_size'])
 
     # Load dataset classes in pytorch dataloader handler object
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = params['bs'])
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = params['bs'],)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size = params['bs'])
 
     # Load network model in cuda (gpu)

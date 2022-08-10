@@ -142,4 +142,3 @@ class SegNet(nn.Module):
         #x = self.conv1_1_D(x)
         x = F.log_softmax(self.conv1_1_D(x))
         return x
-    

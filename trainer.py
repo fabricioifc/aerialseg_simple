@@ -1,5 +1,6 @@
 import torch
 import os
+import cv2
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -127,8 +128,10 @@ class Trainer():
 
         return self.last_loss
 
-
-
+    def ler_imagem(self, name):
+        # print(name)
+        image = cv2.cvtColor(cv2.imread(name), cv2.COLOR_BGR2RGB)
+        return image
 
     def test(self, test_loader = None, stride = None, window_size = None, batch_size = None, output_masks = False):
     
@@ -149,7 +152,7 @@ class Trainer():
         test_inputs, test_labels = test_ld.dataset.get_dataset()
         test_inputs_name = np.copy(test_inputs)
         test_inputs = np.array([1/255 * np.asarray(io.imread(inputs), dtype='float32') for inputs in test_inputs])
-        test_labels = np.array([np.asarray(convert_from_color(io.imread(label)), dtype='int64') for label in test_labels])
+        test_labels = np.array([np.asarray(convert_from_color(self.ler_imagem(label)), dtype='int64') for label in test_labels])
 
         all_predictions = []
         all_labels = []
@@ -187,7 +190,3 @@ class Trainer():
 
             accuracy = global_accuracy(np.concatenate([p.ravel() for p in all_predictions]), np.concatenate([p.ravel() for p in all_labels]).ravel())
         return accuracy
-    
-
-
-

@@ -1,5 +1,6 @@
 import torch
 import os
+import cv2
 import random
 import numpy as np
 from skimage import io
@@ -77,9 +78,12 @@ class Dataset(torch.utils.data.Dataset):
         else:
             # Data is normalized in [0, 1]
             if self.n_channels == 3:
-                data = 1/255 * np.asarray(io.imread(self.data_files[random_idx]).transpose((2,0,1)), dtype='float32')
+                print(f"RGB -> ${self.data_files[random_idx]}")
+                # image = cv2.cvtColor(cv2.imread(self.data_files[random_idx]), cv2.COLOR_BGR2RGB)
+                # data = 1/255 * np.asarray(image.transpose((2,0,1)), dtype='float32')
+                data = 1/255 * np.asarray(cv2.imread(self.data_files[random_idx]).transpose((2,0,1)), dtype='float32')
             else:
-                data = 1/255 * np.asarray(io.imread(self.data_files[random_idx]), dtype='float32')
+                data = 1/255 * np.asarray(cv2.imread(self.data_files[random_idx]), dtype='float32')
                 data = np.stack((data,)*3, axis=0) # if an single-channel image is passed, repeat that channel 3 times.
             
             if self.cache:
@@ -91,7 +95,8 @@ class Dataset(torch.utils.data.Dataset):
 
         else: 
             # Labels are converted from RGB to their numeric values
-            label = np.asarray(convert_from_color(io.imread(self.label_files[random_idx])), dtype='int64')
+            print(f"LABEL -> ${self.label_files[random_idx]}")
+            label = np.asarray(convert_from_color(cv2.imread(self.label_files[random_idx])), dtype='int64')
             if self.cache:
                 self.label_cache_[random_idx] = label
 
